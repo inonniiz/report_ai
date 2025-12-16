@@ -151,34 +151,40 @@ if generate_btn:
     else:
         # 1. DYNAMIC TIME CALCULATION
         word_count = len(user_input.split())
-        # Estimate: Flash processes ~50 words/sec + 2s overhead
-        est_time = round((word_count / 55) + 2) 
-        if est_time < 3: est_time = 3
+        est_time = round((word_count / 50) + 2) 
+        if est_time < 2: est_time = 2
         
-        # Display Dynamic Loading Message
         status_container = st.empty()
         status_container.info(f"🚀 Processing {word_count} words... (Est. time: {est_time}s)")
-        
-        # Progress bar for visual feedback
         my_bar = st.progress(0)
 
-        # 2. GENERATE WITH STREAMING
         try:
-            # Update bar slightly to show start
             my_bar.progress(10, text="AI is reading...")
             
             prompt = get_prompt(mode, user_input)
-            model = genai.GenerativeModel('gemini-2.5-flash') 
+            model = genai.GenerativeModel('gemini-1.5-flash-002') 
             
             # Request Streaming Response
             response_stream = model.generate_content(prompt, stream=True)
             
+            # --- CRITICAL FIX: MANUAL TEXT ACCUMULATION ---
+            accumulated_text = []
+
+            def stream_parser(stream):
+                for chunk in stream:
+                    if chunk.text:
+                        accumulated_text.append(chunk.text)
+                        yield chunk.text
+
             # Container for the "Typing Effect"
             with st.expander("📝 AI Output Stream (Live Preview)", expanded=True):
-                # st.write_stream yields chunks as they come in
-                full_text = st.write_stream(response_stream)
+                # We feed the generator to Streamlit, but ignore its return value
+                st.write_stream(stream_parser(response_stream))
             
-            # Update bar to show generation done
+            # Re-assemble the full string manually from our list
+            full_text = "".join(accumulated_text)
+            # -----------------------------------------------
+
             my_bar.progress(80, text="Rendering PDF document...")
             
             # Clean up text
@@ -208,7 +214,7 @@ if generate_btn:
                 status_container.success(f"✅ Report Ready! ({est_time}s)")
                 st.balloons()
                 
-                # 4. PDF PREVIEW (The new feature)
+                # 4. PDF PREVIEW
                 st.markdown("### 📄 PDF Preview")
                 display_pdf(pdf_data)
                 
