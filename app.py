@@ -162,7 +162,7 @@ if generate_btn:
             my_bar.progress(10, text="AI is reading...")
             
             prompt = get_prompt(mode, user_input)
-            model = genai.GenerativeModel('gemini-1.5-flash-002') 
+            model = genai.GenerativeModel('gemini-2.5-flash') 
             
             # Request Streaming Response
             response_stream = model.generate_content(prompt, stream=True)
