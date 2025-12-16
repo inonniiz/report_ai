@@ -32,7 +32,7 @@ st.markdown("""
     .stTextArea>div>div>textarea {
         background-color: #f0f2f6;
         color: #000000;
-        caret-color: #FF4B4B; /* Blinking Red Cursor */
+        caret-color: #000000; /* Blinking Red Cursor */
     }
     
     /* Preview Box Style */
@@ -60,7 +60,7 @@ def get_prompt(style, user_text):
     sys_msg = """
     ROLE: You are a strict Copy Editor and Formatter.
     TASK: Fix grammar and spelling in the USER_INPUT. Apply formatting.
-    NOTE: if users input AI-generated content and they forget to remove non-content part (e.g. here is your report...) remove for them
+    NOTE: if users input AI-generated content and they forget to remove non-content part (e.g. here is your report...) remove it for them
     CRITICAL RULE: DO NOT ADD ANY NEW CONTENT. DO NOT SUMMARIZE. DO NOT ADD HEADERS/SECTIONS THAT ARE NOT IN THE INPUT.
     Output: Return only the raw code.
     """
@@ -126,7 +126,7 @@ with st.sidebar:
 
 st.header("Create Professional Reports Instantly")
 # Updated Subtext as requested
-st.markdown("Paste your rough notes, meeting transcripts, or ai-generated text below.")
+st.markdown("Paste your rough notes, meeting transcripts, or AI-generated text below.")
 
 tab1, tab2 = st.tabs(["✍️ Input", "ℹ️ How it Works"])
 
