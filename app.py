@@ -32,7 +32,7 @@ st.markdown("""
     .stTextArea>div>div>textarea {
         background-color: #f0f2f6;
         color: #000000;
-        caret-color: #000000; /* Blinking Red Cursor */
+        caret-color: #000000; /* Blinking Cursor */
     }
     
     /* Preview Box Style */
