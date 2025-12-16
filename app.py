@@ -60,6 +60,7 @@ def get_prompt(style, user_text):
     sys_msg = """
     ROLE: You are a strict Copy Editor and Formatter.
     TASK: Fix grammar and spelling in the USER_INPUT. Apply formatting.
+    NOTE: if users input AI-generated content and they forget to remove non-content part (e.g. here is your report...) remove for them
     CRITICAL RULE: DO NOT ADD ANY NEW CONTENT. DO NOT SUMMARIZE. DO NOT ADD HEADERS/SECTIONS THAT ARE NOT IN THE INPUT.
     Output: Return only the raw code.
     """
@@ -167,7 +168,7 @@ if generate_btn:
             my_bar.progress(10, text="AI is reading...")
             
             prompt = get_prompt(mode, user_input)
-            model = genai.GenerativeModel('gemini-1.5-flash-002') 
+            model = genai.GenerativeModel('gemini-2.5-flash') 
             
             # Request Streaming Response
             response_stream = model.generate_content(prompt, stream=True)
